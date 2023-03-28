@@ -1,4 +1,13 @@
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+
 const CategoryCard = (props: any) => {
+  /* const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, []); */
+
   const { category_name } = props.category;
   return (
     <div className="p-3">
@@ -19,3 +28,6 @@ const CategoryCard = (props: any) => {
 };
 
 export default CategoryCard;
+function dispatch(arg0: any) {
+  throw new Error("Function not implemented.");
+}

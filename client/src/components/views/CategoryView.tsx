@@ -5,14 +5,23 @@
 // handle states
 
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getCategories } from "../../actions/categories";
 import CategoryCard from "../CategoryCard";
 import Footer from "../Footer";
 import Header from "../Header";
 
 const CategoryView = () => {
-  const [allCategories, setAllCategories] = useState([]);
+  // const [allCategories, setAllCategories] = useState([]);
+  const allCategories = useSelector((state: any) => state.categories);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
+
+  /* useEffect(() => {
     getCategories();
   }, []);
 
@@ -21,14 +30,14 @@ const CategoryView = () => {
     const json = await data.json();
     // console.log(json.categories);
     setAllCategories(json.categories);
-  }
+  } */
   return (
     <div className="flex flex-col h-screen">
       <div>
         <Header />
       </div>
       <div className=" flex flex-wrap p-10">
-        {allCategories.map((category, index) => {
+        {allCategories?.map((category, index) => {
           console.log(index);
           return <CategoryCard category={category} key={index} />;
         })}
