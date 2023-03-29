@@ -5,6 +5,6 @@ export default (categories = [], action: any) => {
     case FETCH_CATEGORIES:
       return action.payload;
     default:
-      null
+      return categories !== undefined ? categories : [];
   }
 }
