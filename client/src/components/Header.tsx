@@ -1,9 +1,10 @@
-import React from "react";
+import SearchBar from "./SearchBar";
 
 const Header = () => {
   return (
     <div className="h-16 bg-black text-white flex justify-between sticky top-0 z-50">
       <div className="p-4 ml-2 text-2xl">PeerMarket</div>
+      <SearchBar />
       <ul className="flex self-center	float-right">
         <li className="px-4">Chat</li>
         <li className="px-4">+Sell</li>

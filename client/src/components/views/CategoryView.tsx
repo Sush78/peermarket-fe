@@ -1,47 +1,35 @@
-// import header
-// import footer
-// handle grid config
-// import category cards
-// handle states
-
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories } from "../../actions/categories";
 import CategoryCard from "../CategoryCard";
 import Footer from "../Footer";
 import Header from "../Header";
+import { Category } from "../../models/CategoryView.model";
+import CategoryShimmer from "../CategoryShimmer";
 
 const CategoryView = () => {
-  // const [allCategories, setAllCategories] = useState([]);
   const allCategories = useSelector((state: any) => state.categories);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getCategories());
-  }, [dispatch]);
-
-  /* useEffect(() => {
-    getCategories();
   }, []);
 
-  async function getCategories() {
-    const data = await fetch("http://localhost:3001/");
-    const json = await data.json();
-    // console.log(json.categories);
-    setAllCategories(json.categories);
-  } */
   return (
     <div className="flex flex-col h-screen">
       <div>
         <Header />
       </div>
-      <div className=" flex flex-wrap p-10">
-        {allCategories?.map((category, index) => {
-          console.log(index);
-          return <CategoryCard category={category} key={index} />;
-        })}
-      </div>
+      {allCategories?.length === 0 ? (
+        <CategoryShimmer />
+      ) : (
+        <div className=" flex flex-wrap grow justify-center p-10">
+          {allCategories?.map((category: Category) => {
+            return <CategoryCard category={category} key={category._id} />;
+          })}
+        </div>
+      )}
       <div>
         <Footer />
       </div>
