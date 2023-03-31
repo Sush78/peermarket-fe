@@ -6,7 +6,9 @@ const SearchBar = () => {
 
   const onFormSubmit = (e: any) => {
     e.preventDefault();
-    alert(searchText);
+    if (searchText.length) {
+      alert(searchText);
+    }
   };
 
   return (
@@ -21,6 +23,7 @@ const SearchBar = () => {
             onChange={(e) => {
               setSearchText(e.target.value);
             }}
+            onFocus={(e) => e.target.select()}
           />
           <span
             className="bg-white self-center p-2 cursor-pointer"

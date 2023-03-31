@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories } from "../../actions/categories";
 import CategoryCard from "../CategoryCard";
-import Footer from "../Footer";
-import Header from "../Header";
 import { Category } from "../../models/CategoryView.model";
 import CategoryShimmer from "../CategoryShimmer";
 
@@ -17,10 +15,7 @@ const CategoryView = () => {
   }, []);
 
   return (
-    <div className="flex flex-col h-screen">
-      <div>
-        <Header />
-      </div>
+    <>
       {allCategories?.length === 0 ? (
         <CategoryShimmer />
       ) : (
@@ -30,10 +25,7 @@ const CategoryView = () => {
           })}
         </div>
       )}
-      <div>
-        <Footer />
-      </div>
-    </div>
+    </>
   );
 };
 
