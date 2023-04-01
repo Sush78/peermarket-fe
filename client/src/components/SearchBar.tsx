@@ -1,13 +1,42 @@
-import { useState } from "react";
-import { SVG_NAMESPACE } from "../utils/constants/generic";
+import { useEffect, useState } from "react";
+import { getSearchUrl } from "../utils/constants/generic";
+import ClearSearch from "./svg/ClearSearch";
+import SearchIcon from "./svg/SearchIcon";
 
 const SearchBar = () => {
-  const [searchText, setSearchText] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
-  const onFormSubmit = (e: any) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      getSearchSuggestions();
+    }, 200);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchQuery]);
+
+  const getSearchSuggestions = async () => {
+    if (!searchQuery.length) {
+      return;
+    }
+    const SEARCH_PRODUCT_URL = getSearchUrl(searchQuery);
+    const data = await fetch(SEARCH_PRODUCT_URL);
+    const json = await data.json();
+    setSuggestions(json.suggestions.map((suggestion: any) => suggestion.value));
+  };
+
+  const onFormSubmit = (e: any, updatedSearchQuery?: string) => {
     e.preventDefault();
-    if (searchText.length) {
-      alert(searchText);
+    if (searchQuery.length) {
+      setShowSuggestions(false);
+      if (updatedSearchQuery?.length) {
+        console.log(`Make an Api call for ${updatedSearchQuery}`);
+      } else {
+        console.log(`Make an Api call for ${searchQuery}`);
+      }
     }
   };
 
@@ -15,52 +44,60 @@ const SearchBar = () => {
     <div className="font-sans text-black  flex items-center justify-center w-[600px]">
       <div className="border rounded overflow-hidden flex w-[100%] h-9">
         <form onSubmit={onFormSubmit} className="flex w-[100%] bg-white">
-          <input
-            type="text"
-            className="px-4 py-2 w-[100%]"
-            placeholder="Search..."
-            value={searchText}
-            onChange={(e) => {
-              setSearchText(e.target.value);
-            }}
-            onFocus={(e) => e.target.select()}
-          />
-          {searchText.length > 0 && (
-            <span
-              className=" self-center p-2 cursor-pointer"
-              onClick={() => {
-                setSearchText("");
+          <div className="w-[100%] flex">
+            <input
+              type="text"
+              className="px-4 py-2 w-[100%]"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
               }}
-            >
-              <svg
-                xmlns={SVG_NAMESPACE}
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-5 h-6"
+              onFocus={(e) => {
+                e.target.select();
+                setShowSuggestions(true);
+              }}
+              onBlur={() =>
+                setTimeout(() => {
+                  setShowSuggestions(false);
+                }, 200)
+              }
+            />
+            {searchQuery.length > 0 && (
+              <span
+                className=" self-center p-2 cursor-pointer"
+                onClick={() => {
+                  setSearchQuery("");
+                }}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </span>
-          )}
-          <button
-            className="flex items-center justify-center px-4 border-l  bg-white"
-            type="submit"
-          >
-            <svg
-              className="h-4 w-4 text-grey-dark"
-              fill="currentColor"
-              xmlns={SVG_NAMESPACE}
-              viewBox="0 0 24 24"
+                <ClearSearch />
+              </span>
+            )}
+            <button
+              className="flex items-center justify-center px-4 border-l  bg-white"
+              type="submit"
             >
-              <path d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z" />
-            </svg>
-          </button>
+              <SearchIcon />
+            </button>
+          </div>
+          {showSuggestions && suggestions.length > 0 && (
+            <div className="fixed my-9 bg-white w-[600px] rounded-sm shadow-lg border border-gray-100">
+              <ul className="py-1">
+                {suggestions.map((s, index) => (
+                  <li
+                    key={s + index}
+                    className="shadow-sm hover:bg-gray-100 px-2 py-0.5"
+                    onClick={(e: any) => {
+                      setSearchQuery(e.target.innerText);
+                      onFormSubmit(e, e.target.innerText);
+                    }}
+                  >
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </form>
       </div>
     </div>
