@@ -50,11 +50,7 @@ const Header = () => {
         ) : (
           <></>
         )}
-
-        {/* <li className="px-4 mr-2 cursor-pointer" onClick={onLoginClick}>
-          Login with G
-        </li> */}
-        <div id="signInDiv"></div>
+        <div id="signInDiv" className="mr-5 cursor-pointe"></div>
       </ul>
     </div>
   );
