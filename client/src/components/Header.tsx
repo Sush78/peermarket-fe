@@ -3,10 +3,31 @@ import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../slices/user";
+import { useEffect, useState } from "react";
+import jwt_decode from "jwt-decode";
 
 const Header = () => {
   const isUserLoggedIn = useSelector((store: any) => store.user.isUserLoggedIn);
   const dispatch = useDispatch();
+
+  const [user, setuser] = useState(null)
+
+  const handleGoogleCallback = (response:any) => {
+    setuser(jwt_decode(response.credential))
+  }
+
+  useEffect(() => {
+    console.log(import.meta.env.VITE_GOOGLE_CLIENT_ID)
+    google.accounts.id.initialize({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      callback: handleGoogleCallback
+    })
+
+    google.accounts.id.renderButton(
+      document.getElementById("signInDiv"),
+      {theme: "outline", size: "medium"}
+    )
+  },[])
 
   const onLoginClick = () => {
     dispatch(loginUser());
@@ -22,7 +43,7 @@ const Header = () => {
           <li className="px-4">Chat</li>
         </Link>
 
-        {isUserLoggedIn ? (
+        {user !== null ? (
           <Link to={`/sell`}>
             <li className="px-4">+Sell</li>
           </Link>
@@ -30,9 +51,10 @@ const Header = () => {
           <></>
         )}
 
-        <li className="px-4 mr-2 cursor-pointer" onClick={onLoginClick}>
+        {/* <li className="px-4 mr-2 cursor-pointer" onClick={onLoginClick}>
           Login with G
-        </li>
+        </li> */}
+        <div id="signInDiv"></div>
       </ul>
     </div>
   );
