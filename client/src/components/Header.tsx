@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../slices/user";
+import { loginUser } from "../redux/slices/user";
 
 const Header = () => {
   const isUserLoggedIn = useSelector((store: any) => store.user.isUserLoggedIn);
