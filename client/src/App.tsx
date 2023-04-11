@@ -6,12 +6,18 @@ import ProductList from "./components/ProductList";
 import Chat from "./components/Chat";
 import Sell from "./components/Sell";
 import Error from "./components/Error";
+import { useEffect, useState } from "react";
+import BarChart from "./components/BarChart";
+import PlaceBet from "./components/PlaceBet";
 
 function App() {
+  const [graphData, setGraphData] = useState({});
+
   return (
     <div className="flex flex-col h-screen">
       <Header />
       <Outlet />
+      {/* <BarChart /> */}
       <Footer />
     </div>
   );
@@ -25,11 +31,11 @@ const appRouter = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <CategoryView />,
+        element: <BarChart />,
       },
       {
-        path: "/productList",
-        element: <ProductList />,
+        path: "/placeBet",
+        element: <PlaceBet />,
       },
       {
         path: "/chat",
