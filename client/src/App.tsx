@@ -23,7 +23,6 @@ function App() {
     socket.on("connect", () => {
       socket.on("welcome", (data) => {
         const totalCount = data?.true + data?.false;
-        console.log("---", totalCount);
         dispatch(addDataToChart(data));
       });
 
