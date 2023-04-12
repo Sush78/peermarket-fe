@@ -9,12 +9,34 @@ import Error from "./components/Error";
 import { useEffect, useState } from "react";
 import BarChart from "./components/BarChart";
 import PlaceBet from "./components/PlaceBet";
+import { io } from "socket.io-client";
+import { addDataToChart } from "./redux/slices/chart";
+import { useDispatch } from "react-redux";
+import LandingPage from "./components/LandingPage";
+
+const socket = io("http://localhost:3001");
 
 function App() {
-  const [graphData, setGraphData] = useState({});
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      socket.on("welcome", (data) => {
+        const totalCount = data?.true + data?.false;
+        console.log("---", totalCount);
+        dispatch(addDataToChart(data));
+      });
+
+      socket.emit("msg", "Thanks for connecting!");
+    });
+
+    return () => {
+      socket.off("connect");
+    };
+  }, []);
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen font-sans">
       <Header />
       <Outlet />
       {/* <BarChart /> */}
@@ -31,7 +53,7 @@ const appRouter = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <BarChart />,
+        element: <LandingPage />,
       },
       {
         path: "/placeBet",

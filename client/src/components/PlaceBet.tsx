@@ -10,9 +10,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { io } from "socket.io-client";
-import { Link } from "react-router-dom";
 import PlaceBetForm from "./PlaceBetForm";
+import { useSelector } from "react-redux";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
 
@@ -26,43 +25,24 @@ const initialData = {
   ],
 };
 
-const socket = io("http://localhost:3001");
-
 const PlaceBet = () => {
   const [data, setData] = useState(initialData);
-  const [truePercentage, setTruePercentage] = useState(0);
-  const [falsePercentage, setFalsePercentage] = useState(0);
-  const [totalSize, setTotalSize] = useState(0);
+  const chartData = useSelector((store: any) => store.chart.chartData);
+  const totalCount = chartData?.true + chartData?.false;
+  const truePercentage = (chartData?.true / totalCount) * 100;
+  const falsePercentage = (chartData?.false / totalCount) * 100;
 
-  console.log(data);
   useEffect(() => {
-    socket.on("connect", () => {
-      socket.on("welcome", (data) => {
-        const totalCount = data?.true + data?.false;
-        setTotalSize(totalCount);
-        setTruePercentage((data?.true / totalCount) * 100);
-        setFalsePercentage((data?.false / totalCount) * 100);
-        setData({
-          labels: ["Yes", "No"],
-          datasets: [
-            {
-              backgroundColor: ["green", "red"],
-              data: [
-                (data?.true / totalCount) * 100,
-                (data?.false / totalCount) * 100,
-              ],
-            },
-          ],
-        });
-      });
-
-      socket.emit("msg", "Thanks for connecting!");
+    setData({
+      labels: ["Yes", "No"],
+      datasets: [
+        {
+          backgroundColor: ["green", "red"],
+          data: [truePercentage, falsePercentage],
+        },
+      ],
     });
-
-    return () => {
-      socket.off("connect");
-    };
-  }, []);
+  }, [chartData]);
 
   return (
     <div className="flex  min-h-screen">
@@ -71,7 +51,7 @@ const PlaceBet = () => {
         <div className="m-2 p-2 flex flex-col">
           <div className=""> Yes: {truePercentage.toFixed(2)}%</div>
           <div> No: {falsePercentage.toFixed(2)}%</div>
-          <div> Total Size: {totalSize}</div>
+          <div> Total Size: {totalCount}</div>
         </div>
       </div>
       <div className="w-1/2 border border-black-900 p-2 m-6">
