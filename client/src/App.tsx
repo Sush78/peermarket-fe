@@ -14,12 +14,12 @@ import { addDataToChart } from "./redux/slices/chart";
 import { useDispatch } from "react-redux";
 import LandingPage from "./components/LandingPage";
 
-const socket = io("http://localhost:3001");
+// const socket = io("http://localhost:3001");
 
 function App() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  /* useEffect(() => {
     socket.on("connect", () => {
       socket.on("welcome", (data) => {
         const totalCount = data?.true + data?.false;
@@ -32,7 +32,7 @@ function App() {
     return () => {
       socket.off("connect");
     };
-  }, []);
+  }, []); */
 
   return (
     <div className="flex flex-col h-screen font-sans">
@@ -55,7 +55,7 @@ const appRouter = createBrowserRouter([
         element: <LandingPage />,
       },
       {
-        path: "/placeBet",
+        path: `/placeBet`,
         element: <PlaceBet />,
       },
       {
