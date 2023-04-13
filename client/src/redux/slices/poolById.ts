@@ -27,7 +27,15 @@ const poolByIdSlice = createSlice({
       console.log('Error', action.payload);
     });
   },
-  reducers: {}
+  reducers: {
+    updateStatsObj: (state: any, action) => {
+      const { choice, amount } = action.payload
+      const index = state.data.statsObj.labels.indexOf(choice)
+      state.data.statsObj.data[index] += amount
+      console.log(index, state.data.statsObj.data[index])
+    }
+  }
 })
 
+export const { updateStatsObj } = poolByIdSlice.actions
 export default poolByIdSlice.reducer

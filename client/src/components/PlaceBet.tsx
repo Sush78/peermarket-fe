@@ -13,12 +13,14 @@ import {
 import PlaceBetForm from "./PlaceBetForm";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getPoolById } from "../redux/slices/poolById";
+import { getPoolById, updateStatsObj } from "../redux/slices/poolById";
 import { AppDispatch } from "../redux/store";
 import { io } from "socket.io-client";
 import { PoolContext } from "../context/PoolContext";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
+
+const socket = io("http://localhost:9000");
 
 const initialData = {
   labels: ["Yes", "No"],
@@ -30,39 +32,37 @@ const initialData = {
   ],
 };
 
-const socket = io("http://localhost:9000");
-
 const PlaceBet = () => {
   const { currentAccount, placeBet } = useContext(PoolContext);
+  const poolDetails = useSelector((store: any) => store.getPoolById);
+
+  // const [data, setData] = useState(initialData);
+  let data = initialData;
+  const dispatch = useDispatch<AppDispatch>();
+  const [searchParams] = useSearchParams();
+  const poolId: any = searchParams.get("poolId");
+  const currentPool = poolDetails?.data;
+
+  // data = poolDetails?.data;
 
   useEffect(() => {
     dispatch(getPoolById(poolId));
 
-    setData({
-      labels: ["Yes", "No"],
-      datasets: [
-        {
-          backgroundColor: ["green", "red"],
-          data: [truePercentage, falsePercentage],
-        },
-      ],
-    });
-
     socket.on("newBet", (data) => {
       console.log("+++++", data);
+      // append the data to actual data
+      dispatch(
+        updateStatsObj({
+          choice: data.choice,
+          amount: data.amount,
+        })
+      );
     });
 
     return () => {
       socket.off("connect");
     };
   }, []);
-
-  const [data, setData] = useState(initialData);
-  const dispatch = useDispatch<AppDispatch>();
-  const poolDetails = useSelector((store: any) => store.getPoolById);
-
-  const [searchParams] = useSearchParams();
-  const poolId: any = searchParams.get("poolId");
 
   const navigate = useNavigate();
   const [amount, setAmount] = useState(0);
@@ -81,32 +81,34 @@ const PlaceBet = () => {
     }
   };
 
-  const topPools = useSelector((state: any) => state.topPools);
-  const currentPool = topPools.data.filter(
-    (pool: any) => pool._id === poolId
-  )[0];
+  console.log(poolDetails?.data["poolData"], "--+++++++");
+  if (poolDetails?.data["poolData"] === undefined) {
+    return;
+  }
 
-  const [firstLabel, setFirstLabel] = useState(currentPool.resultMap["0"]);
-  const [secondLabel, setSecondLabel] = useState(currentPool.resultMap["1"]);
-  const [firstLabelValue, setFirstLabelValue] = useState(
-    currentPool.stats["0"]
-  );
-  const [secondLabelValue, setSecondLabelValue] = useState(
-    currentPool.stats["1"]
-  );
-
-  const totalCount = firstLabelValue + secondLabelValue;
-  const truePercentage = (firstLabelValue / totalCount) * 100;
-  const falsePercentage = (secondLabelValue / totalCount) * 100;
-
+  console.log("-----", poolDetails);
   return (
     <div className="flex  min-h-screen">
       <div className="w-1/2 h-auto p-2 m-6 border border-black-900">
-        <Bar data={data} />
+        <Bar
+          data={{
+            labels: poolDetails?.labels,
+            datasets: [
+              {
+                backgroundColor: ["green", "red"],
+                data: poolDetails?.data,
+              },
+            ],
+          }}
+        />
         <div className="m-2 p-2 flex flex-col">
-          <div className=""> Yes: {truePercentage.toFixed(2)}%</div>
-          <div> No: {falsePercentage.toFixed(2)}%</div>
-          <div> Total Size: {totalCount}</div>
+          <div className="">
+            {poolDetails?.labels[0]}: {poolDetails?.data[0]}%
+          </div>
+          <div>
+            {poolDetails?.labels[1]}: {poolDetails?.data[1]}%
+          </div>
+          <div> Total Size: {poolDetails?.totalCount}</div>
         </div>
       </div>
       <div className="w-1/2 border border-black-900 p-2 m-6 flex flex-col ">
@@ -119,18 +121,18 @@ const PlaceBet = () => {
               type="radio"
               id="radio-one"
               name="switch-one"
-              value="yes"
-              onClick={() => setChoice("yes")}
+              value={poolDetails?.labels["0"]}
+              onClick={() => setChoice(poolDetails?.labels["0"])}
             />
-            <label htmlFor="radio-one">Yes</label>
+            <label htmlFor="radio-one">{poolDetails?.labels["0"]}</label>
             <input
               type="radio"
               id="radio-two"
               name="switch-one"
-              value="no"
-              onClick={() => setChoice("no")}
+              value={poolDetails?.labels["1"]}
+              onClick={() => setChoice(poolDetails?.labels["1"])}
             />
-            <label htmlFor="radio-two">No</label>
+            <label htmlFor="radio-two">{poolDetails?.labels["1"]}</label>
           </div>
           <form onSubmit={onFormSubmit}>
             <div>
