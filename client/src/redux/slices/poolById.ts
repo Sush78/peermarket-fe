@@ -30,9 +30,7 @@ const poolByIdSlice = createSlice({
   reducers: {
     updateStatsObj: (state: any, action) => {
       const { choice, amount } = action.payload
-      const index = state.data.statsObj.labels.indexOf(choice)
-      state.data.statsObj.data[index] += amount
-      console.log(index, state.data.statsObj.data[index])
+      console.log(choice, amount)
     }
   }
 })

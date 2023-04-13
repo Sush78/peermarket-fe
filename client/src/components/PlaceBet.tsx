@@ -51,12 +51,6 @@ const PlaceBet = () => {
     socket.on("newBet", (data) => {
       console.log("+++++", data);
       // append the data to actual data
-      dispatch(
-        updateStatsObj({
-          choice: data.choice,
-          amount: data.amount,
-        })
-      );
     });
 
     return () => {
@@ -81,38 +75,38 @@ const PlaceBet = () => {
     }
   };
 
-  console.log(poolDetails?.data["poolData"], "--+++++++");
-  if (poolDetails?.data["poolData"] === undefined) {
+  if (!poolDetails?.data?.data) {
     return;
   }
 
-  console.log("-----", poolDetails);
   return (
     <div className="flex  min-h-screen">
       <div className="w-1/2 h-auto p-2 m-6 border border-black-900">
         <Bar
           data={{
-            labels: poolDetails?.labels,
+            labels: poolDetails?.data?.labels,
             datasets: [
               {
                 backgroundColor: ["green", "red"],
-                data: poolDetails?.data,
+                data: poolDetails?.data?.data,
               },
             ],
           }}
         />
         <div className="m-2 p-2 flex flex-col">
           <div className="">
-            {poolDetails?.labels[0]}: {poolDetails?.data[0]}%
+            {poolDetails?.data?.labels[0]}: {poolDetails?.data?.data[0]}%
           </div>
           <div>
-            {poolDetails?.labels[1]}: {poolDetails?.data[1]}%
+            {poolDetails?.data?.labels[1]}: {poolDetails?.data?.data[1]}%
           </div>
           <div> Total Size: {poolDetails?.totalCount}</div>
         </div>
       </div>
       <div className="w-1/2 border border-black-900 p-2 m-6 flex flex-col ">
-        <div className="text-xl py-2 font-bold">{currentPool?.name}</div>
+        <div className="text-xl py-2 font-bold">
+          {poolDetails?.data?.poolData?.name}
+        </div>
 
         <div className="flex flex-col">
           <div className="switch-field p-2">
@@ -121,18 +115,18 @@ const PlaceBet = () => {
               type="radio"
               id="radio-one"
               name="switch-one"
-              value={poolDetails?.labels["0"]}
-              onClick={() => setChoice(poolDetails?.labels["0"])}
+              value={poolDetails?.data?.labels["0"]}
+              onClick={() => setChoice(poolDetails?.data?.labels["0"])}
             />
-            <label htmlFor="radio-one">{poolDetails?.labels["0"]}</label>
+            <label htmlFor="radio-one">{poolDetails?.data?.labels["0"]}</label>
             <input
               type="radio"
               id="radio-two"
               name="switch-one"
-              value={poolDetails?.labels["1"]}
-              onClick={() => setChoice(poolDetails?.labels["1"])}
+              value={poolDetails?.data?.labels["1"]}
+              onClick={() => setChoice(poolDetails?.data?.labels["1"])}
             />
-            <label htmlFor="radio-two">{poolDetails?.labels["1"]}</label>
+            <label htmlFor="radio-two">{poolDetails?.data?.labels["1"]}</label>
           </div>
           <form onSubmit={onFormSubmit}>
             <div>
@@ -158,7 +152,7 @@ const PlaceBet = () => {
 
         <div className="py-2">
           <span className="font-bold"> Description:</span>{" "}
-          {currentPool?.Description}
+          {poolDetails?.data?.poolData?.Description}
         </div>
       </div>
     </div>
