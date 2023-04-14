@@ -76,7 +76,7 @@ const PlaceBet = () => {
   };
 
   if (!poolDetails?.data?.data) {
-    return;
+    return <></>;
   }
 
   return (
@@ -100,7 +100,7 @@ const PlaceBet = () => {
           <div>
             {poolDetails?.data?.labels[1]}: {poolDetails?.data?.data[1]}%
           </div>
-          <div> Total Size: {poolDetails?.totalCount}</div>
+          <div> Total Volume: {poolDetails?.data?.totalVolume}</div>
         </div>
       </div>
       <div className="w-1/2 border border-black-900 p-2 m-6 flex flex-col ">
@@ -116,7 +116,7 @@ const PlaceBet = () => {
               id="radio-one"
               name="switch-one"
               value={poolDetails?.data?.labels["0"]}
-              onClick={() => setChoice(poolDetails?.data?.labels["0"])}
+              onClick={() => setChoice("0")}
             />
             <label htmlFor="radio-one">{poolDetails?.data?.labels["0"]}</label>
             <input
@@ -124,7 +124,7 @@ const PlaceBet = () => {
               id="radio-two"
               name="switch-one"
               value={poolDetails?.data?.labels["1"]}
-              onClick={() => setChoice(poolDetails?.data?.labels["1"])}
+              onClick={() => setChoice("1")}
             />
             <label htmlFor="radio-two">{poolDetails?.data?.labels["1"]}</label>
           </div>
