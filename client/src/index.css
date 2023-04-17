@@ -78,3 +78,23 @@
 .switch-field label:last-of-type {
 	border-radius: 0 4px 4px 0;
 }
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease-in-out;
+	z-index: 999;
+}
+
+.overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}

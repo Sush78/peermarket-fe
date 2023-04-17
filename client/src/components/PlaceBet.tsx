@@ -17,6 +17,8 @@ import { getPoolById, updateChart } from "../redux/slices/poolById";
 import { AppDispatch } from "../redux/store";
 import { io } from "socket.io-client";
 import { PoolContext } from "../context/PoolContext";
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
 
@@ -38,6 +40,9 @@ const PlaceBet = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams] = useSearchParams();
   const poolId: any = searchParams.get("poolId");
+  const { width, height } = useWindowSize();
+  const [isVisible, setIsVisible] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
     dispatch(getPoolById(poolId));
@@ -63,9 +68,16 @@ const PlaceBet = () => {
     if (amount > 0 && choice.length > 0) {
       console.log(amount, choice);
       socket.emit("newBet", { poolId, choice, amount, currentAccount });
+      setIsVisible(true);
+      setIsClicked(true);
       // placeBet()
       // navigate("/");
     }
+  };
+
+  const onOverlayClick = () => {
+    setIsClicked(false);
+    navigate("/");
   };
 
   if (!poolDetails?.data?.data) {
@@ -150,6 +162,27 @@ const PlaceBet = () => {
           {poolDetails?.data?.poolData?.Description}
         </div>
       </div>
+      {isVisible && <Confetti width={width} height={height} />}
+      {isClicked && (
+        <div className="overlay ">
+          <div className="flex flex-col items-center bg-white rounded-lg">
+            <div className="flex w-64 p-2">
+              <div className="flex flex-col shadow-lg">
+                <img src="/nft-image.jpg" alt="NFT" />
+              </div>
+              <div
+                className="font-bold self-start pl-2 cursor-pointer"
+                onClick={onOverlayClick}
+              >
+                x
+              </div>
+            </div>
+            <div className="text-xl p-2 w-64 pt-0 text-center">
+              Congratulations Your Bet Has Been Placed!🎉
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
