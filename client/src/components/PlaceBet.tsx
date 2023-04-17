@@ -13,7 +13,7 @@ import {
 import PlaceBetForm from "./PlaceBetForm";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getPoolById, updateStatsObj } from "../redux/slices/poolById";
+import { getPoolById, updateChart } from "../redux/slices/poolById";
 import { AppDispatch } from "../redux/store";
 import { io } from "socket.io-client";
 import { PoolContext } from "../context/PoolContext";
@@ -35,22 +35,15 @@ const initialData = {
 const PlaceBet = () => {
   const { currentAccount, placeBet } = useContext(PoolContext);
   const poolDetails = useSelector((store: any) => store.getPoolById);
-
-  // const [data, setData] = useState(initialData);
-  let data = initialData;
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams] = useSearchParams();
   const poolId: any = searchParams.get("poolId");
-  const currentPool = poolDetails?.data;
-
-  // data = poolDetails?.data;
 
   useEffect(() => {
     dispatch(getPoolById(poolId));
 
     socket.on("newBet", (data) => {
-      console.log("+++++", data);
-      // append the data to actual data
+      dispatch(updateChart(data));
     });
 
     return () => {
@@ -78,6 +71,8 @@ const PlaceBet = () => {
   if (!poolDetails?.data?.data) {
     return <></>;
   }
+
+  console.log("------");
 
   return (
     <div className="flex  min-h-screen">

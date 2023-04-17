@@ -28,12 +28,13 @@ const poolByIdSlice = createSlice({
     });
   },
   reducers: {
-    updateStatsObj: (state: any, action) => {
-      const { choice, amount } = action.payload
-      console.log(choice, amount)
+    updateChart: (state: any, action) => {
+      const { data, totalVolume } = action.payload
+      state.data.data = data
+      state.data.totalVolume = totalVolume
     }
   }
 })
 
-export const { updateStatsObj } = poolByIdSlice.actions
+export const { updateChart } = poolByIdSlice.actions
 export default poolByIdSlice.reducer
