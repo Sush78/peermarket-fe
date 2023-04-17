@@ -17,6 +17,8 @@ import { getPoolById, updateChart } from "../redux/slices/poolById";
 import { AppDispatch } from "../redux/store";
 import { io } from "socket.io-client";
 import { PoolContext } from "../context/PoolContext";
+import useWindowSize from "react-use/lib/useWindowSize";
+import Confetti from "react-confetti";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
 
@@ -38,6 +40,8 @@ const PlaceBet = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams] = useSearchParams();
   const poolId: any = searchParams.get("poolId");
+  const { width, height } = useWindowSize();
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     dispatch(getPoolById(poolId));
@@ -63,6 +67,7 @@ const PlaceBet = () => {
     if (amount > 0 && choice.length > 0) {
       console.log(amount, choice);
       socket.emit("newBet", { poolId, choice, amount, currentAccount });
+      setIsVisible(true);
       // placeBet()
       // navigate("/");
     }
@@ -150,6 +155,7 @@ const PlaceBet = () => {
           {poolDetails?.data?.poolData?.Description}
         </div>
       </div>
+      {isVisible && <Confetti width={width} height={height} />}
     </div>
   );
 };
