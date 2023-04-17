@@ -6,10 +6,15 @@ const PlaceBetForm = () => {
   const [amount, setAmount] = useState(0);
   const [choice, setChoice] = useState("");
 
+  let removeDisabledClass =
+    amount > 0 && choice.length > 0 ? "" : "cursor-not-allowed opacity-50";
+
   const onFormSubmit = (e: any) => {
     e.preventDefault();
-    console.log(amount, choice);
-    navigate("/");
+    if (amount > 0 && choice.length > 0) {
+      console.log(amount, choice);
+      navigate("/");
+    }
   };
 
   return (
@@ -38,18 +43,19 @@ const PlaceBetForm = () => {
           <input
             type="number"
             className="focus:bg-grey-200 p-2 m-2 border boder-black-500 w-1/2"
-            placeholder="Enter amount"
+            placeholder="Enter amount greater than 0"
             onChange={(e) => {
               setAmount(+e.target.value);
             }}
           />
         </div>
         <div>
-          {/* <Link to={"/"}> */}
-          <button type="submit" className="p-2 m-2 bg-slate-100 rounded-lg">
+          <button
+            type="submit"
+            className={`p-2 m-2 shadow-lg text-white bg-black w-1/2 ${removeDisabledClass} `}
+          >
             Place Bet
           </button>
-          {/* </Link> */}
         </div>
       </form>
     </div>

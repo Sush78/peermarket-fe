@@ -49,8 +49,8 @@
 }
 
 .switch-field label {
-	background-color: #e4e4e4;
-	color: rgba(0, 0, 0, 0.6);
+	background-color: white;
+	color: black;
 	font-size: 14px;
 	line-height: 1;
 	text-align: center;
@@ -66,7 +66,8 @@
 }
 
 .switch-field input:checked + label {
-	background-color: #a5dc86;
+	background-color: black;
+  color: white;
 	box-shadow: none;
 }
 
