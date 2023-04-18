@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Bar } from "react-chartjs-2";
+import { Line, Bar } from "react-chartjs-2";
+import ZoomPlugin from 'chartjs-plugin-zoom';
 import {
   Chart as ChartJS,
   ChartType,
   CategoryScale,
   LinearScale,
   BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
@@ -20,7 +23,7 @@ import { PoolContext } from "../context/PoolContext";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
+ChartJS.register(CategoryScale, LinearScale, BarElement,PointElement,LineElement,ZoomPlugin, Title, Tooltip);
 
 const socket = io("http://localhost:9000");
 
@@ -83,13 +86,52 @@ const PlaceBet = () => {
   if (!poolDetails?.data?.data) {
     return <></>;
   }
-
+  
+  const options = {
+    plugins: {
+      zoom: {
+        zoom: {
+          wheel: {
+            enabled: true,
+          },
+          pinch: {
+            enabled: true
+          },
+          mode: 'xy'
+        },
+        pan: {
+          enabled: true,
+          mode: 'xy'
+        }
+      }
+    }
+  };
   console.log("------");
 
   return (
     <div className="flex  min-h-screen">
-      <div className="w-1/2 h-auto p-2 m-6 border border-black-900">
-        <Bar
+      <div className="w-1/2 h-auto p-2 m-6 border border-black-900 flex flex-col overflow-y-auto">
+      <div className="h-1/2 p-2 mx-6 border border-black-900">
+      <Line className="h-2/6" data={{
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [
+          {
+            label: poolDetails?.data?.labels[0],
+            data: [200, 230, 220, 250, 280, 300, 330, 310, 290, 280, 300, 320],
+            fill: false,
+            borderColor: '#1f77b4',
+          },
+          {
+            label: poolDetails?.data?.labels[1],
+            data: [180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290],
+            fill: false,
+            borderColor: '#d62728',
+          },
+        ],
+      }} options={options}/>
+      </div>
+      <div className="h-1/2 p-2 mx-6 my-1 border border-black-900">
+        <Bar className="h-2/6"
           data={{
             labels: poolDetails?.data?.labels,
             datasets: [
@@ -100,17 +142,13 @@ const PlaceBet = () => {
             ],
           }}
         />
-        <div className="m-2 p-2 flex flex-col">
-          <div className="">
-            {poolDetails?.data?.labels[0]}: {poolDetails?.data?.data[0]}%
-          </div>
-          <div>
-            {poolDetails?.data?.labels[1]}: {poolDetails?.data?.data[1]}%
-          </div>
-          <div> Total Volume: {poolDetails?.data?.totalVolume}</div>
         </div>
       </div>
-      <div className="w-1/2 border border-black-900 p-2 m-6 flex flex-col ">
+      <div className="w-1/2 h-auto p-2 m-6 border border-black-900 flex flex-col overflow-y-auto">
+        <div className="h-1/2 p-2 mx-6 border border-black-900">
+        <div className="text-3xl py-2 font-bold text-center">
+            Place Bet
+          </div>
         <div className="text-xl py-2 font-bold">
           {poolDetails?.data?.poolData?.name}
         </div>
@@ -183,6 +221,19 @@ const PlaceBet = () => {
           </div>
         </div>
       )}
+      <div className="h-1/2 p-2 mx-6 my-1 border border-black-900">
+      <div className="text-3xl py-2 font-bold text-center">
+            Bet Details
+          </div>
+          <div>
+            {poolDetails?.data?.labels[0]}: {poolDetails?.data?.data[0]}%
+          </div>
+          <div>
+            {poolDetails?.data?.labels[1]}: {poolDetails?.data?.data[1]}%
+          </div>
+          <div> Total Volume: {poolDetails?.data?.totalVolume}</div>
+        </div>
+    </div>
     </div>
   );
 };
