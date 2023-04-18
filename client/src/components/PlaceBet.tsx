@@ -74,24 +74,6 @@ const PlaceBet = () => {
   if (!poolDetails?.data?.data) {
     return <></>;
   }
-
-  const test = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    datasets: [
-      {
-        label: 'Tech Stocks',
-        data: [200, 230, 220, 250, 280, 300, 330, 310, 290, 280, 300, 320],
-        fill: false,
-        borderColor: '#1f77b4',
-      },
-      {
-        label: 'Healthcare Stocks',
-        data: [180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290],
-        fill: false,
-        borderColor: '#d62728',
-      },
-    ],
-  };
   
   const options = {
     plugins: {
@@ -118,7 +100,23 @@ const PlaceBet = () => {
     <div className="flex  min-h-screen">
       <div className="w-1/2 h-auto p-2 m-6 border border-black-900 flex flex-col overflow-y-auto">
       <div className="h-1/2 p-2 mx-6 border border-black-900">
-      <Line className="h-2/6" data={test} options={options}/>
+      <Line className="h-2/6" data={{
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        datasets: [
+          {
+            label: poolDetails?.data?.labels[0],
+            data: [200, 230, 220, 250, 280, 300, 330, 310, 290, 280, 300, 320],
+            fill: false,
+            borderColor: '#1f77b4',
+          },
+          {
+            label: poolDetails?.data?.labels[1],
+            data: [180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290],
+            fill: false,
+            borderColor: '#d62728',
+          },
+        ],
+      }} options={options}/>
       </div>
       <div className="h-1/2 p-2 mx-6 my-1 border border-black-900">
         <Bar className="h-2/6"
