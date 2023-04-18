@@ -86,24 +86,6 @@ const PlaceBet = () => {
   if (!poolDetails?.data?.data) {
     return <></>;
   }
-
-  const test = {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    datasets: [
-      {
-        label: 'Tech Stocks',
-        data: [200, 230, 220, 250, 280, 300, 330, 310, 290, 280, 300, 320],
-        fill: false,
-        borderColor: '#1f77b4',
-      },
-      {
-        label: 'Healthcare Stocks',
-        data: [180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290],
-        fill: false,
-        borderColor: '#d62728',
-      },
-    ],
-  };
   
   const options = {
     plugins: {
