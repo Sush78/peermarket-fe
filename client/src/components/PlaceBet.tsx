@@ -128,7 +128,7 @@ const PlaceBet = () => {
             borderColor: '#d62728',
           },
         ],
-      }} options={options}/>
+      }}/>
       </div>
       <div className="h-1/2 p-2 mx-6 my-1 border border-black-900">
         <Bar className="h-2/6"
