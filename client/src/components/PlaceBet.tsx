@@ -22,10 +22,11 @@ import { io } from "socket.io-client";
 import { PoolContext } from "../context/PoolContext";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
+import { hosturl } from "../utils/constants/generic";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement,PointElement,LineElement,ZoomPlugin, Title, Tooltip);
 
-const socket = io("http://localhost:9000");
+const socket = io(hosturl);
 
 const initialData = {
   labels: ["Yes", "No"],
@@ -69,12 +70,11 @@ const PlaceBet = () => {
   const onFormSubmit = (e: any) => {
     e.preventDefault();
     if (amount > 0 && choice.length > 0) {
-      console.log(amount, choice);
       socket.emit("newBet", { poolId, choice, amount, currentAccount });
       setIsVisible(true);
       setIsClicked(true);
-      // placeBet()
-      // navigate("/");
+      placeBet(amount, choice)
+      navigate("/");
     }
   };
 
@@ -174,6 +174,7 @@ const PlaceBet = () => {
             <div>
               <input
                 type="number"
+                step="any"
                 className="focus:bg-grey-200 p-2 m-2 border boder-black-500 w-1/2"
                 placeholder="Enter amount greater than 0"
                 onChange={(e) => {
