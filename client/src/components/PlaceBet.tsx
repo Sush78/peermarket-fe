@@ -87,8 +87,13 @@ const PlaceBet = () => {
     return <></>;
   }
   
-  const options = {
-    plugins: {
+  console.log("------");
+
+  return (
+    <div className="flex  min-h-screen">
+      <div className="w-1/2 h-auto p-2 m-6 border border-black-900 flex flex-col overflow-y-auto">
+      <div className="h-1/2 p-2 mx-6 border border-black-900">
+      <Line className="h-2/6" options={{plugins: {
       zoom: {
         zoom: {
           wheel: {
@@ -104,15 +109,7 @@ const PlaceBet = () => {
           mode: 'xy'
         }
       }
-    }
-  };
-  console.log("------");
-
-  return (
-    <div className="flex  min-h-screen">
-      <div className="w-1/2 h-auto p-2 m-6 border border-black-900 flex flex-col overflow-y-auto">
-      <div className="h-1/2 p-2 mx-6 border border-black-900">
-      <Line className="h-2/6" data={{
+    }}} data={{
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
         datasets: [
           {
