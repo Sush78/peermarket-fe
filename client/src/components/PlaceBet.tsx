@@ -30,37 +30,37 @@ const PlaceBet = () => {
   const { currentAccount, placeBet } = useContext(PoolContext);
   const poolDetails = useSelector((store: any) => store.getPoolById);
   if (poolDetails?.data?.timestamps !== undefined) {
+    debugger;
     const timestamps1 = poolDetails?.data?.timestamps[0];
     const timestamps2 = poolDetails?.data?.timestamps[1];
     const amounts1 = poolDetails?.data?.amounts[0];
     const amounts2 = poolDetails?.data?.amounts[1];
     var finalData: any = [];
+    var timestamps: any = [];
     var t1 = [];
     for (let i = 0; i < timestamps1.length; i++) {
       const amount1 = amounts1[i];
-      t1.push({ x: timestamps1[i], y: amount1 });
+      t1.push({ x: moment(timestamps1[i]).subtract(1, 'hour').format("DD-MM-YYYY HH:mm:ss"), y: amount1 });
     }
     var t2 = []
     for (let i = 0; i < timestamps2.length; i++) {
       const amount2 = amounts2[i];
-      t2.push({ x: timestamps2[i], y: amount2 });
+      t2.push({ x: moment(timestamps2[i]).subtract(1, 'hour').format("DD-MM-YYYY HH:mm:ss"), y: amount2 });
     }
     // Sort data by timestamp
     finalData = [
       {
-        type: "line",
         label: poolDetails?.data?.labels[0],
         borderColor: "green",
         data: t1
       },
       {
-        type: "line",
         label: poolDetails?.data?.labels[1],
         borderColor: "red",
         data: t2
       },
     ];
-
+    timestamps = (finalData[0].data.map((item) => item.x).concat(finalData[1].data.map((item) => item.x))).sort()
   }
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams] = useSearchParams();
@@ -86,7 +86,6 @@ const PlaceBet = () => {
 
   let removeDisabledClass =
     amount > 0 && choice.length > 0 ? "" : "cursor-not-allowed opacity-50";
-
   const onFormSubmit = (e: any) => {
     e.preventDefault();
     if (amount > 0 && choice.length > 0) {
@@ -109,7 +108,6 @@ const PlaceBet = () => {
   }
 
   console.log("------");
-
   return (
     <div className="flex  min-h-screen">
       <div className="w-1/2 h-auto p-2 m-6 border border-black-900 flex flex-col overflow-y-auto">
@@ -118,7 +116,7 @@ const PlaceBet = () => {
             responsive: true,
             scales: {
               // @ts-ignore
-              x: {
+              xAxis: {
                 ticks: {
                     // Include a dollar sign in the ticks
                     callback: function(value, index, ticks) {
@@ -127,7 +125,7 @@ const PlaceBet = () => {
                         return moment(time).subtract(1, 'hour').format("DD-MM-YYYY HH:mm:ss");
                     },
                 },
-                labels: (poolDetails?.data?.timestamps[0].concat(poolDetails?.data?.timestamps[1])).sort(),
+                labels: timestamps,
             }
             }, plugins: {
               zoom: {
