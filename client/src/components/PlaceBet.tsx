@@ -29,17 +29,13 @@ const socket = io("http://localhost:9000");
 const PlaceBet = () => {
   const { currentAccount, placeBet } = useContext(PoolContext);
   const poolDetails = useSelector((store: any) => store.getPoolById);
-  debugger;
   if (poolDetails?.data?.timestamps !== undefined) {
     const timestamps1 = poolDetails?.data?.timestamps[0];
     const timestamps2 = poolDetails?.data?.timestamps[1];
     const amounts1 = poolDetails?.data?.amounts[0];
     const amounts2 = poolDetails?.data?.amounts[1];
-
-
     var finalData: any = [];
     var t1 = [];
-    // Loop through timestamps and map corresponding amounts
     for (let i = 0; i < timestamps1.length; i++) {
       const amount1 = amounts1[i];
       t1.push({ x: timestamps1[i], y: amount1 });
@@ -49,7 +45,6 @@ const PlaceBet = () => {
       const amount2 = amounts2[i];
       t2.push({ x: timestamps2[i], y: amount2 });
     }
-
     // Sort data by timestamp
     finalData = [
       {
@@ -127,10 +122,12 @@ const PlaceBet = () => {
                 ticks: {
                     // Include a dollar sign in the ticks
                     callback: function(value, index, ticks) {
+                      // @ts-ignore
                       let time = ((poolDetails?.data?.timestamps[0].concat(poolDetails?.data?.timestamps[1])).sort())[index]
-                        return moment(time).format("YYYY-MM-DD HH:mm:ss");
+                        return moment(time).subtract(1, 'hour').format("DD-MM-YYYY HH:mm:ss");
                     },
-                }
+                },
+                labels: (poolDetails?.data?.timestamps[0].concat(poolDetails?.data?.timestamps[1])).sort(),
             }
             }, plugins: {
               zoom: {
@@ -150,7 +147,6 @@ const PlaceBet = () => {
               }
             }
           }} data={{
-            labels: (poolDetails?.data?.timestamps[0].concat(poolDetails?.data?.timestamps[1])).sort(),
             datasets: finalData
           }} />
                  </div>
