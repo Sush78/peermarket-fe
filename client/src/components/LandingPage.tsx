@@ -21,7 +21,7 @@ const LandingPage = () => {
   } */
 
   return (
-    <div className="flex flex-wrap justify-center">
+    <div className="flex flex-wrap justify-center min-h-screen ">
       {topPools.data.map((pool: any) => {
         return <BarChart key={pool._id} {...pool} />;
       })}

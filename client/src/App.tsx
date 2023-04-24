@@ -35,10 +35,9 @@ function App() {
   }, []); */
 
   return (
-    <div className="flex flex-col h-screen font-sans">
+    <div className="flex flex-col min-h-screen font-sans bg-gradient-to-b from-gray-700 via-gray-900 to-slate-900">
       <Header />
       <Outlet />
-      {/* <BarChart /> */}
       <Footer />
     </div>
   );
