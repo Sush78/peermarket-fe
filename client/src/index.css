@@ -49,9 +49,10 @@
 }
 
 .switch-field label {
-	background-color: white;
+	background-color: White;
 	color: black;
-	font-size: 14px;
+	font-size: 18px;
+	font-weight: bold;
 	line-height: 1;
 	text-align: center;
 	padding: 8px 16px;
@@ -59,6 +60,9 @@
 	border: 1px solid rgba(0, 0, 0, 0.2);
 	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
 	transition: all 0.1s ease-in-out;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .switch-field label:hover {
@@ -66,7 +70,7 @@
 }
 
 .switch-field input:checked + label {
-	background-color: black;
+	background-color: rgb(29 78 216);
   color: white;
 	box-shadow: none;
 }
