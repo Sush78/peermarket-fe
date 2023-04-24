@@ -40,7 +40,20 @@ const BarChart = (props: any) => {
     <div className="w-96 h-17 p-2 m-6 border border-black-900 rounded-xl flex flex-col items-center shadow-lg">
       <h2 className="text-lg font-bold text-white">{props.name}</h2>
       <Link to={`/placeBet?poolId=${props._id}`} key={props._id}>
-        <Bar data={data} />
+        <Bar data={data} options = {{
+              scales: {
+                  x: {
+                      ticks: {
+                        color:"white"
+                      },
+                  },
+                  y: {
+                    ticks: {
+                      color:"white"
+                    }
+                }
+              }
+          }} />
         <div className="flex justify-center">
           <button className="p-2 m-2 bg-slate-100 shadow-lg rounded-xl w-64 text-base font-bold">
             Place Bet
