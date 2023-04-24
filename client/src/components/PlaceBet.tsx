@@ -73,7 +73,7 @@ const PlaceBet = () => {
       socket.emit("newBet", { poolId, choice, amount, currentAccount });
       setIsVisible(true);
       setIsClicked(true);
-      placeBet()
+      placeBet(amount,choice)
       // navigate("/");
     }
   };

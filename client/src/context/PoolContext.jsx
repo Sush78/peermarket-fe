@@ -57,44 +57,32 @@ export const PoolProvider = ({ children }) => {
         }
     }
 
-    const placeBet = async () => {
+    const selectChoice = async (choice) => {
+      if (choice){
+        return ethers.utils.formatBytes32String('CSK')
+      } else{
+        return ethers.utils.formatBytes32String('RCB')
+      }
+    }
+
+    const placeBet = async (amount,choice) => {
         console.log("placing bet...")
-        const { poolGasPrice, poolContract } = createPoolContract();
-        const { pmcGasPrice, pmcContract } = createPMCContract();
+        try{
+          if(!ethereum) return alert("Please install metamask")
 
-        console.log(poolGasPrice.toString());
-        console.log(pmcGasPrice.toString());
+          const betChoice = await selectChoice(choice)
 
-        //const estimation = await poolContract.estimateGas.transfer(currentAccount, 100);
-        //console.log(estimation);
+          const { poolGasPrice, poolContract } = createPoolContract();
+          const { pmcGasPrice, pmcContract } = createPMCContract();
 
-        //const balance = await poolContract.accountBalance(currentAccount,ethers.utils.formatBytes32String('CSK'))
-        //console.log(ethers.utils.formatEther(balance))
+          const deposit = await poolContract.depositTokens(ethers.utils.formatBytes32String('PMC'),ethers.utils.formatBytes32String('CSK'),amount,{gasPrice:poolGasPrice,gasLimit:100000});
 
-        const approve = await pmcContract.approve(poolContract.address,100,{gasPrice:pmcGasPrice,gasLimit:pmcGasPrice})
-        approve.wait()
-        console.log(approve)
-        const deposit = await poolContract.depositTokens(ethers.utils.formatBytes32String('PMC'),ethers.utils.formatBytes32String('CSK'),100,{gasPrice:poolGasPrice,gasLimit:poolGasPrice});
-        deposit.wait()
-        console.log(deposit)
-        //const approve = await pmcContract.approve(poolContract.address,50)
-        //console.log(approve)
-        //const deposit = await poolContract.depositTokens(ethers.utils.formatBytes32String('PMC'),ethers.utils.formatBytes32String('CSK'),10);
-        //console.log(pmcContract);
+          console.log(deposit.hash)
+        }  catch(error){
+          console.log(error)
+          alert("Could not deposit into pool")
+        }
 
-        // try{
-        //     if(!ethereum) return alert("Please install metamask")
-        //     const electionContract = getEthereumContract()
-        //     const electionHash = await electionContract.vote(parseInt(formData.candidate))
-        //     setIsLoading(true)
-        //     console.log(`Loading vote transaction: ${electionHash.hash}`)
-        //     electionHash.wait()
-        //     console.log(`success vote transaction: ${electionHash.hash}`)
-        //     setIsLoading(false)
-        // } catch(error){
-        //     console.log(error)
-        //     alert("No ethereum object")
-        // }
     }
 
     useEffect(() => {
