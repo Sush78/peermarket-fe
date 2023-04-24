@@ -164,9 +164,15 @@ const PlaceBet = () => {
                       return moment(time)
                         .format("HH:mm");
                     },
+                    color: "white"
                   },
                   labels: timestamps,
                 },
+                y: {
+                  ticks: {
+                    color:"white"
+                  }
+              }
               },
               plugins: {
                 zoom: {
@@ -202,7 +208,20 @@ const PlaceBet = () => {
                   data: poolDetails?.data?.data,
                 },
               ],
-            }}
+            }} options = {{
+              scales: {
+                  x: {
+                      ticks: {
+                        color:"white"
+                      },
+                  },
+                  y: {
+                    ticks: {
+                      color:"white"
+                    },
+                }
+              }
+          }}
           />
         </div>
       </div>
@@ -299,4 +318,3 @@ const PlaceBet = () => {
 };
 
 export default PlaceBet;
-
