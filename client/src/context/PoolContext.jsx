@@ -75,6 +75,7 @@ export const PoolProvider = ({ children }) => {
           const { poolGasPrice, poolContract } = createPoolContract();
           const { pmcGasPrice, pmcContract } = createPMCContract();
 
+          const allow = await pmcContract.approve(poolContract.address,amount,{gasPrice:pmcGasPrice,gasLimit:100000})
           const deposit = await poolContract.depositTokens(ethers.utils.formatBytes32String('PMC'),betChoice,amount,{gasPrice:poolGasPrice,gasLimit:100000});
 
           console.log(deposit.hash)
