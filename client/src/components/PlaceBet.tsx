@@ -90,6 +90,7 @@ const PlaceBet = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [lineChartData, setLineChartData] = useState([]);
+  const [timeStampData, setTimeStampData] = useState([]);
 
   useEffect(() => {
     dispatch(getPoolById(poolId));
@@ -145,6 +146,7 @@ const PlaceBet = () => {
         .sort();
 
       setLineChartData(finalData);
+      setTimeStampData(timestamps);
     }
   }, [poolDetails?.data?.timestamps, poolDetails?.data?.amounts]);
 
@@ -196,11 +198,11 @@ const PlaceBet = () => {
                       let time = poolDetails?.data?.timestamps[0]
                         .concat(poolDetails?.data?.timestamps[1])
                         .sort()[index];
-                      return moment(time).format("HH:mm");
+                      return moment(time).format("HH:mm:ss");
                     },
                     color: "white",
                   },
-                  labels: timestamps,
+                  labels: timeStampData,
                 },
                 y: {
                   ticks: {
