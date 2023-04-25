@@ -13,7 +13,11 @@ import {
 } from "chart.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getPoolById, updateChart } from "../redux/slices/poolById";
+import {
+  getPoolById,
+  updateChart,
+  clearPoolData,
+} from "../redux/slices/poolById";
 import { AppDispatch } from "../redux/store";
 import { io } from "socket.io-client";
 import { PoolContext } from "../context/PoolContext";
@@ -94,6 +98,7 @@ const PlaceBet = () => {
 
     return () => {
       socket.off("connect");
+      dispatch(clearPoolData());
     };
   }, []);
 
@@ -147,15 +152,15 @@ const PlaceBet = () => {
                         .sort()[index];
                       return moment(time).format("HH:mm");
                     },
-                    color: "white"
+                    color: "white",
                   },
                   labels: timestamps,
                 },
                 y: {
                   ticks: {
-                    color:"white"
-                  }
-              }
+                    color: "white",
+                  },
+                },
               },
               plugins: {
                 zoom: {
@@ -191,20 +196,21 @@ const PlaceBet = () => {
                   data: poolDetails?.data?.data,
                 },
               ],
-            }} options = {{
+            }}
+            options={{
               scales: {
-                  x: {
-                      ticks: {
-                        color:"white"
-                      },
+                x: {
+                  ticks: {
+                    color: "white",
                   },
-                  y: {
-                    ticks: {
-                      color:"white"
-                    },
-                }
-              }
-          }}
+                },
+                y: {
+                  ticks: {
+                    color: "white",
+                  },
+                },
+              },
+            }}
           />
         </div>
       </div>
@@ -223,7 +229,7 @@ const PlaceBet = () => {
                 value={poolDetails?.data?.labels["0"]}
                 onClick={() => setChoice("0")}
               />
-              <label htmlFor="radio-one" className="w-11/12 h-16 rounded-xl">
+              <label htmlFor="radio-one" className="w-11/12 h-20 rounded-xl">
                 {poolDetails?.data?.labels["0"]}
               </label>
               <input
@@ -234,7 +240,7 @@ const PlaceBet = () => {
                 value={poolDetails?.data?.labels["1"]}
                 onClick={() => setChoice("1")}
               />
-              <label htmlFor="radio-two" className="w-11/12 h-16 rounded-xl">
+              <label htmlFor="radio-two" className="w-11/12 h-20 rounded-xl">
                 {poolDetails?.data?.labels["1"]}
               </label>
             </div>
@@ -242,7 +248,7 @@ const PlaceBet = () => {
               <div className="my-1">
                 <input
                   type="number"
-                  className="focus:bg-grey-200 p-2 border boder-black-500 w-full h-16 rounded-xl bg-white placeholder-black"
+                  className="focus:bg-grey-200 p-2 border boder-black-500 w-full h-20 text-xl rounded-xl bg-slate-900 text-white placeholder-white "
                   placeholder="Enter amount greater than 0"
                   onChange={(e) => {
                     setAmount(+e.target.value);
@@ -252,7 +258,7 @@ const PlaceBet = () => {
               <div>
                 <button
                   type="submit"
-                  className={`rounded-2xl h-14 my-1 w-full shadow-lg text-white bg-blue-700 w-1/2 ${removeDisabledClass} `}
+                  className={`rounded-2xl h-14 my-1 w-full shadow-lg text-white text-xl bg-blue-900 w-1/2 ${removeDisabledClass} `}
                 >
                   Place Bet
                 </button>
