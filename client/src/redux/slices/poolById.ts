@@ -32,9 +32,12 @@ const poolByIdSlice = createSlice({
       const { data, totalVolume } = action.payload
       state.data.data = data
       state.data.totalVolume = totalVolume
+    },
+    clearPoolData: (state: any) => {
+      state.data = {}
     }
   }
 })
 
-export const { updateChart } = poolByIdSlice.actions
+export const { updateChart, clearPoolData } = poolByIdSlice.actions
 export default poolByIdSlice.reducer
