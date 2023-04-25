@@ -1,10 +1,8 @@
-const url = "http://localhost:9000/api/"
-//http://ec2-13-42-40-31.eu-west-2.compute.amazonaws.com/api/pools/get-top-pools
-//http://localhost:9000/
+import { bedEndPoint } from "../utils/constants/generic"
 
-export const fetchCategories = () => fetch(url)
+export const fetchCategories = () => fetch(bedEndPoint)
 
-export const fetchTopPools = () => fetch(`${url}pools/get-top-pools`)
+export const fetchTopPools = () => fetch(`${bedEndPoint}pools/get-top-pools`)
 
-export const fetchPoolById = (id: string) => fetch(`${url}pools/get-pool/${id}`)
+export const fetchPoolById = (id: string) => fetch(`${bedEndPoint}pools/get-pool/${id}`)
 
