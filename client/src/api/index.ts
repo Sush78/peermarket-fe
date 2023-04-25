@@ -1,5 +1,5 @@
-const url = "http://localhost:9000/"
-//http://ec2-13-42-40-31.eu-west-2.compute.amazonaws.com/pools/get-top-pools
+const url = "http://localhost:9000/api/"
+//http://ec2-13-42-40-31.eu-west-2.compute.amazonaws.com/api/pools/get-top-pools
 //http://localhost:9000/
 
 export const fetchCategories = () => fetch(url)
