@@ -33,9 +33,12 @@ const poolByIdSlice = createSlice({
       debugger;
       state.data.data = data
       state.data.totalVolume = totalVolume
+    },
+    clearPoolData: (state: any) => {
+      state.data = {}
     }
   }
 })
 
-export const { updateChart } = poolByIdSlice.actions
+export const { updateChart, clearPoolData } = poolByIdSlice.actions
 export default poolByIdSlice.reducer

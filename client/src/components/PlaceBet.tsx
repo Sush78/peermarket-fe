@@ -13,7 +13,11 @@ import {
 } from "chart.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { getPoolById, updateChart } from "../redux/slices/poolById";
+import {
+  getPoolById,
+  updateChart,
+  clearPoolData,
+} from "../redux/slices/poolById";
 import { AppDispatch } from "../redux/store";
 import { io } from "socket.io-client";
 import { PoolContext } from "../context/PoolContext";
@@ -94,6 +98,7 @@ const PlaceBet = () => {
 
     return () => {
       socket.off("connect");
+      dispatch(clearPoolData());
     };
   }, []);
 
