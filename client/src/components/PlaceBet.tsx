@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Line, Bar } from "react-chartjs-2";
 import ZoomPlugin from "chartjs-plugin-zoom";
 import {
   Chart as ChartJS,
-  ChartType,
   CategoryScale,
   LinearScale,
   BarElement,
@@ -11,9 +10,7 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
-import PlaceBetForm from "./PlaceBetForm";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getPoolById, updateChart } from "../redux/slices/poolById";
@@ -37,21 +34,10 @@ ChartJS.register(
 
 const socket = io("http://localhost:9000");
 
-const initialData = {
-  labels: ["Yes", "No"],
-  datasets: [
-    {
-      backgroundColor: ["green", "red"],
-      data: [0, 0],
-    },
-  ],
-};
-
 const PlaceBet = () => {
   const { currentAccount, placeBet } = useContext(PoolContext);
   const poolDetails = useSelector((store: any) => store.getPoolById);
   if (poolDetails?.data?.timestamps !== undefined) {
-    debugger;
     const timestamps1 = poolDetails?.data?.timestamps[0];
     const timestamps2 = poolDetails?.data?.timestamps[1];
     const amounts1 = poolDetails?.data?.amounts[0];
@@ -62,8 +48,7 @@ const PlaceBet = () => {
     for (let i = 0; i < timestamps1.length; i++) {
       const amount1 = amounts1[i];
       t1.push({
-        x: moment(timestamps1[i])
-          .format("DD-MM-YYYY HH:mm:ss"),
+        x: moment(timestamps1[i]).format("DD-MM-YYYY HH:mm:ss"),
         y: amount1,
       });
     }
@@ -71,8 +56,7 @@ const PlaceBet = () => {
     for (let i = 0; i < timestamps2.length; i++) {
       const amount2 = amounts2[i];
       t2.push({
-        x: moment(timestamps2[i])
-          .format("DD-MM-YYYY HH:mm:ss"),
+        x: moment(timestamps2[i]).format("DD-MM-YYYY HH:mm:ss"),
         y: amount2,
       });
     }
@@ -161,8 +145,7 @@ const PlaceBet = () => {
                       let time = poolDetails?.data?.timestamps[0]
                         .concat(poolDetails?.data?.timestamps[1])
                         .sort()[index];
-                      return moment(time)
-                        .format("HH:mm");
+                      return moment(time).format("HH:mm");
                     },
                     color: "white"
                   },
@@ -293,7 +276,7 @@ const PlaceBet = () => {
                 </div>
               </div>
               <div className="text-xl p-2 w-64 pt-0 text-center">
-                Congratulations Your Bet Has Been Placed!ðŸŽ‰
+                Congratulations Your Bet Has Been Placed!
               </div>
             </div>
           </div>
