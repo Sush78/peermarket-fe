@@ -42,47 +42,6 @@ const socket = io(bedEndPoint);
 const PlaceBet = () => {
   const { currentAccount, placeBet } = useContext(PoolContext);
   const poolDetails = useSelector((store: any) => store.getPoolById);
-  if (poolDetails?.data?.timestamps !== undefined) {
-    const timestamps1 = poolDetails?.data?.timestamps[0];
-    const timestamps2 = poolDetails?.data?.timestamps[1];
-    const amounts1 = poolDetails?.data?.amounts[0];
-    const amounts2 = poolDetails?.data?.amounts[1];
-    var finalData: any = [];
-    var timestamps: any = [];
-    var t1 = [];
-    for (let i = 0; i < timestamps1.length; i++) {
-      const amount1 = amounts1[i];
-      t1.push({
-        x: moment(timestamps1[i]).format("DD-MM-YYYY HH:mm:ss"),
-        y: amount1,
-      });
-    }
-    var t2 = [];
-    for (let i = 0; i < timestamps2.length; i++) {
-      const amount2 = amounts2[i];
-      t2.push({
-        x: moment(timestamps2[i]).format("DD-MM-YYYY HH:mm:ss"),
-        y: amount2,
-      });
-    }
-    // Sort data by timestamp
-    finalData = [
-      {
-        label: poolDetails?.data?.labels[0],
-        borderColor: "green",
-        data: t1,
-      },
-      {
-        label: poolDetails?.data?.labels[1],
-        borderColor: "red",
-        data: t2,
-      },
-    ];
-    timestamps = finalData[0].data
-      .map((item: { x: any }) => item.x)
-      .concat(finalData[1].data.map((item: { x: any }) => item.x))
-      .sort();
-  }
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams] = useSearchParams();
   const poolId: any = searchParams.get("poolId");
