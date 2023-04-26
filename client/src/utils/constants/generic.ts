@@ -8,3 +8,4 @@ export const getSearchUrl = (searchQuery: string) => {
 }
 
 export const bedEndPoint = "http://ec2-18-134-138-146.eu-west-2.compute.amazonaws.com/api/"
+export const socketEndPoint = "http://ec2-18-134-138-146.eu-west-2.compute.amazonaws.com/";

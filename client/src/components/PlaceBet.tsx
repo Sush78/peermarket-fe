@@ -24,7 +24,7 @@ import { PoolContext } from "../context/PoolContext";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 import moment from "moment";
-import { bedEndPoint } from "../utils/constants/generic";
+import { socketEndPoint } from "../utils/constants/generic";
 
 ChartJS.register(
   CategoryScale,
@@ -37,58 +37,19 @@ ChartJS.register(
   Tooltip
 );
 
-const socket = io(bedEndPoint);
+const socket = io(socketEndPoint);
 
 const PlaceBet = () => {
   const { currentAccount, placeBet } = useContext(PoolContext);
   const poolDetails = useSelector((store: any) => store.getPoolById);
-  if (poolDetails?.data?.timestamps !== undefined) {
-    const timestamps1 = poolDetails?.data?.timestamps[0];
-    const timestamps2 = poolDetails?.data?.timestamps[1];
-    const amounts1 = poolDetails?.data?.amounts[0];
-    const amounts2 = poolDetails?.data?.amounts[1];
-    var finalData: any = [];
-    var timestamps: any = [];
-    var t1 = [];
-    for (let i = 0; i < timestamps1.length; i++) {
-      const amount1 = amounts1[i];
-      t1.push({
-        x: moment(timestamps1[i]).format("DD-MM-YYYY HH:mm:ss"),
-        y: amount1,
-      });
-    }
-    var t2 = [];
-    for (let i = 0; i < timestamps2.length; i++) {
-      const amount2 = amounts2[i];
-      t2.push({
-        x: moment(timestamps2[i]).format("DD-MM-YYYY HH:mm:ss"),
-        y: amount2,
-      });
-    }
-    // Sort data by timestamp
-    finalData = [
-      {
-        label: poolDetails?.data?.labels[0],
-        borderColor: "green",
-        data: t1,
-      },
-      {
-        label: poolDetails?.data?.labels[1],
-        borderColor: "red",
-        data: t2,
-      },
-    ];
-    timestamps = finalData[0].data
-      .map((item: { x: any }) => item.x)
-      .concat(finalData[1].data.map((item: { x: any }) => item.x))
-      .sort();
-  }
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams] = useSearchParams();
   const poolId: any = searchParams.get("poolId");
   const { width, height } = useWindowSize();
   const [isVisible, setIsVisible] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  const [lineChartData, setLineChartData] = useState([]);
+  const [timeStampData, setTimeStampData] = useState([]);
 
   useEffect(() => {
     dispatch(getPoolById(poolId));
@@ -102,6 +63,51 @@ const PlaceBet = () => {
       dispatch(clearPoolData());
     };
   }, []);
+
+  useEffect(() => {
+    if (poolDetails?.data?.timestamps !== undefined) {
+      const timestamps1 = poolDetails?.data?.timestamps[0];
+      const timestamps2 = poolDetails?.data?.timestamps[1];
+      const amounts1 = poolDetails?.data?.amounts[0];
+      const amounts2 = poolDetails?.data?.amounts[1];
+      var finalData: any = [];
+      var timestamps: any = [];
+      var t1 = [];
+      for (let i = 0; i < timestamps1.length; i++) {
+        const amount1 = amounts1[i];
+        t1.push({
+          x: moment(timestamps1[i]).format("DD-MM-YYYY HH:mm:ss"),
+          y: amount1,
+        });
+      }
+      var t2 = [];
+      for (let i = 0; i < timestamps2.length; i++) {
+        const amount2 = amounts2[i];
+        t2.push({
+          x: moment(timestamps2[i]).format("DD-MM-YYYY HH:mm:ss"),
+          y: amount2,
+        });
+      }
+      // Sort data by timestamp
+      finalData = [        {          label: poolDetails?.data?.labels[0],
+          borderColor: "green",
+          data: t1,
+        },
+        {
+          label: poolDetails?.data?.labels[1],
+          borderColor: "red",
+          data: t2,
+        },
+      ];
+      timestamps = finalData[0].data
+        .map((item: { x: any }) => item.x)
+        .concat(finalData[1].data.map((item: { x: any }) => item.x))
+        .sort();
+
+      setLineChartData(finalData);
+      setTimeStampData(timestamps);
+    }
+  }, [poolDetails?.data?.timestamps, poolDetails?.data?.amounts]);
 
   const navigate = useNavigate();
   const [amount, setAmount] = useState(0);
@@ -151,11 +157,11 @@ const PlaceBet = () => {
                       let time = poolDetails?.data?.timestamps[0]
                         .concat(poolDetails?.data?.timestamps[1])
                         .sort()[index];
-                      return moment(time).format("HH:mm");
+                      return moment(time).format("HH:mm:ss");
                     },
                     color: "white",
                   },
-                  labels: timestamps,
+                  labels: timeStampData,
                 },
                 y: {
                   ticks: {
@@ -181,9 +187,7 @@ const PlaceBet = () => {
                 },
               },
             }}
-            data={{
-              datasets: finalData,
-            }}
+            data={{ datasets: lineChartData }}
           />
         </div>
         <div className="h-1/2 p-2 mx-6 my-1 shadow-xl">
