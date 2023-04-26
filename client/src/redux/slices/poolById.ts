@@ -29,8 +29,11 @@ const poolByIdSlice = createSlice({
   },
   reducers: {
     updateChart: (state: any, action) => {
-      const { data, totalVolume } = action.payload
+      const { data, amounts, timestamps, totalVolume } = action.payload
+      debugger;
       state.data.data = data
+      state.data.amounts = amounts
+      state.data.timestamps = timestamps
       state.data.totalVolume = totalVolume
     },
     clearPoolData: (state: any) => {

@@ -24,7 +24,7 @@ import { PoolContext } from "../context/PoolContext";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 import moment from "moment";
-import { bedEndPoint } from "../utils/constants/generic";
+import { socketEndPoint } from "../utils/constants/generic";
 
 ChartJS.register(
   CategoryScale,
@@ -37,7 +37,7 @@ ChartJS.register(
   Tooltip
 );
 
-const socket = io(bedEndPoint);
+const socket = io(socketEndPoint);
 
 const PlaceBet = () => {
   const { currentAccount, placeBet } = useContext(PoolContext);
