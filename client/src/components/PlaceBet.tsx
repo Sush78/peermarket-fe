@@ -55,7 +55,9 @@ const PlaceBet = () => {
     dispatch(getPoolById(poolId));
 
     socket.on("newBet", (data) => {
-      dispatch(updateChart(data));
+      if (data?.poolId === poolId) {
+        dispatch(updateChart(data));
+      }
     });
 
     return () => {
@@ -89,10 +91,8 @@ const PlaceBet = () => {
         });
       }
       // Sort data by timestamp
-      finalData = [        {          label: poolDetails?.data?.labels[0],
-          borderColor: "green",
-          data: t1,
-        },
+      finalData = [
+        { label: poolDetails?.data?.labels[0], borderColor: "green", data: t1 },
         {
           label: poolDetails?.data?.labels[1],
           borderColor: "red",
@@ -124,7 +124,6 @@ const PlaceBet = () => {
       setIsVisible(true);
       setIsClicked(true);
       placeBet(amount, choice);
-      // navigate("/");
     }
   };
 
@@ -136,8 +135,6 @@ const PlaceBet = () => {
   if (!poolDetails?.data?.data) {
     return <></>;
   }
-
-  console.log("------");
 
   return (
     <div className="flex min-h-screen ">

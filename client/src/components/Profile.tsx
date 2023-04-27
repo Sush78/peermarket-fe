@@ -62,6 +62,13 @@ const Profile = () => {
             >
               <li className="px-4">My Pools</li>
             </Link>
+            <Link
+              to={`/createPool`}
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+            >
+              <li className="px-4">Create Pool</li>
+            </Link>
           </div>
         </div>
       )}

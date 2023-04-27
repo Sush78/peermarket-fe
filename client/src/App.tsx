@@ -1,11 +1,11 @@
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import { createBrowserRouter, Outlet } from "react-router-dom";
-import Sell from "./components/Sell";
 import Error from "./components/Error";
 import PlaceBet from "./components/PlaceBet";
 import LandingPage from "./components/LandingPage";
 import MyBets from "./components/MyBets";
+import CreatePool from "./components/CreatePool";
 
 function App() {
   return (
@@ -36,8 +36,8 @@ const appRouter = createBrowserRouter([
         element: <MyBets />,
       },
       {
-        path: "/sell",
-        element: <Sell />,
+        path: "/createPool",
+        element: <CreatePool />,
       },
     ],
   },
