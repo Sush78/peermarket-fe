@@ -12,6 +12,15 @@ const CreatePool = () => {
     console.log(e, poolName);
   };
 
+  let removeDisabledClass =
+    poolName.length > 0 &&
+    firstBetOption.length > 0 &&
+    secondBetOption.length > 0 &&
+    poolDescription.length > 0 &&
+    poolApi.length > 0
+      ? ""
+      : "cursor-not-allowed opacity-50";
+
   return (
     <div className="min-h-screen flex flex-col mt-2">
       <div className="h-auto p-2 w-1/2 mx-6 border border-slate-500 rounded-2xl self-center">
@@ -64,14 +73,14 @@ const CreatePool = () => {
               className="focus:bg-grey-200 p-2 border boder-black-500 w-full text-xl rounded-xl bg-slate-900 text-white placeholder-white "
               placeholder="Enter Pool Description"
               onChange={(e) => {
-                setSecondBetOption(e.target.value);
+                setPoolDescription(e.target.value);
               }}
             ></textarea>
           </div>
           <div>
             <button
               type="submit"
-              className={`rounded-2xl h-14 my-1 w-full shadow-lg text-white text-xl bg-blue-900 w-1/2`}
+              className={`rounded-2xl h-14 my-1 w-full shadow-lg text-white text-xl bg-blue-900 w-1/2 ${removeDisabledClass}`}
             >
               Create Pool
             </button>
