@@ -49,10 +49,6 @@ const PlaceBet = () => {
   const { width, height } = useWindowSize();
   const [isVisible, setIsVisible] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
-  const [amount0, setAmount0Data] = useState<any[]>([]);
-  const [amount1, setAmount1Data] = useState<any[]>([]);
-  const [poolData, setPoolDetailsData] = useState<any[]>([]);
-  const [timeStampData, setTimeStampData] = useState<any[]>([]);
 
   useEffect(() => {
     dispatch(getPoolById(poolId));
