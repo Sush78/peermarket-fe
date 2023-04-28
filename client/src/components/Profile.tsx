@@ -53,21 +53,27 @@ const Profile = () => {
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
             >
-              <li className="px-4">My Bets</li>
+              <li className="px-4 menu-item" onClick={() => setIsOpen(false)}>
+                My Bets
+              </li>
             </Link>
             <Link
               to={`/`}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
             >
-              <li className="px-4">My Pools</li>
+              <li className="px-4 menu-item" onClick={() => setIsOpen(false)}>
+                My Pools
+              </li>
             </Link>
             <Link
               to={`/createPool`}
               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
               role="menuitem"
             >
-              <li className="px-4">Create Pool</li>
+              <li className="px-4 menu-item" onClick={() => setIsOpen(false)}>
+                Create Pool
+              </li>
             </Link>
           </div>
         </div>

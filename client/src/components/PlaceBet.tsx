@@ -26,6 +26,7 @@ import Confetti from "react-confetti";
 // import moment from "moment";
 import { socketEndPoint } from "../utils/constants/generic";
 import LineChart from "./LineChart";
+import PlaceBetShimmer from "./PlaceBetShimmer";
 
 ChartJS.register(
   CategoryScale,
@@ -67,16 +68,16 @@ const PlaceBet = () => {
   const amounts_0: any[] = [];
   const amounts_1: any[] = [];
   const timeStamps: any[] = [];
-  
+
   if (poolDetails?.data?.graphData != undefined) {
     for (const data of poolDetails?.data?.graphData) {
-      const [timestamp, direction] = Object.keys(data)[0].split('-');
+      const [timestamp, direction] = Object.keys(data)[0].split("-");
       const amount = data[Object.keys(data)[0]][0];
       timeStamps.push(new Date(timestamp));
-      if (direction === '0') {
+      if (direction === "0") {
         amounts_0.push(amount);
         amounts_1.push(null);
-      } else if (direction === '1') {
+      } else if (direction === "1") {
         amounts_1.push(amount);
         amounts_0.push(null);
       }
@@ -106,6 +107,10 @@ const PlaceBet = () => {
     navigate("/");
   };
 
+  if (poolDetails.isLoading) {
+    return <PlaceBetShimmer />;
+  }
+
   if (!poolDetails?.data?.data) {
     return <></>;
   }
@@ -114,7 +119,12 @@ const PlaceBet = () => {
     <div className="flex min-h-screen ">
       <div className="w-1/2 h-auto p-2 m-6 flex flex-col overflow-y-auto">
         <div className="h-1/2 p-2 mx-6 shadow-xl ">
-          <LineChart amounts0={amounts_0} amounts1={amounts_1} poolDetails={poolDetails} timestamps={timeStamps} />
+          <LineChart
+            amounts0={amounts_0}
+            amounts1={amounts_1}
+            poolDetails={poolDetails}
+            timestamps={timeStamps}
+          />
         </div>
         <div className="h-1/2 p-2 mx-6 my-1 shadow-xl">
           <Bar
