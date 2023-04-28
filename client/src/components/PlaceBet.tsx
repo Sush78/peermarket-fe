@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { Line, Bar } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import ZoomPlugin from "chartjs-plugin-zoom";
 import {
   Chart as ChartJS,
@@ -23,8 +23,9 @@ import { io } from "socket.io-client";
 import { PoolContext } from "../context/PoolContext";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
-import moment from "moment";
+// import moment from "moment";
 import { socketEndPoint } from "../utils/constants/generic";
+import LineChart from "./LineChart";
 
 ChartJS.register(
   CategoryScale,
@@ -48,12 +49,9 @@ const PlaceBet = () => {
   const { width, height } = useWindowSize();
   const [isVisible, setIsVisible] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
-  const [lineChartData, setLineChartData] = useState([]);
-  const [timeStampData, setTimeStampData] = useState([]);
 
   useEffect(() => {
     dispatch(getPoolById(poolId));
-
     socket.on("newBet", (data) => {
       if (data?.poolId === poolId) {
         dispatch(updateChart(data));
@@ -66,48 +64,24 @@ const PlaceBet = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (poolDetails?.data?.timestamps !== undefined) {
-      const timestamps1 = poolDetails?.data?.timestamps[0];
-      const timestamps2 = poolDetails?.data?.timestamps[1];
-      const amounts1 = poolDetails?.data?.amounts[0];
-      const amounts2 = poolDetails?.data?.amounts[1];
-      var finalData: any = [];
-      var timestamps: any = [];
-      var t1 = [];
-      for (let i = 0; i < timestamps1.length; i++) {
-        const amount1 = amounts1[i];
-        t1.push({
-          x: moment(timestamps1[i]).format("DD-MM-YYYY HH:mm:ss"),
-          y: amount1,
-        });
+  const amounts_0: any[] = [];
+  const amounts_1: any[] = [];
+  const timeStamps: any[] = [];
+  
+  if (poolDetails?.data?.graphData != undefined) {
+    for (const data of poolDetails?.data?.graphData) {
+      const [timestamp, direction] = Object.keys(data)[0].split('-');
+      const amount = data[Object.keys(data)[0]][0];
+      timeStamps.push(new Date(timestamp));
+      if (direction === '0') {
+        amounts_0.push(amount);
+        amounts_1.push(null);
+      } else if (direction === '1') {
+        amounts_1.push(amount);
+        amounts_0.push(null);
       }
-      var t2 = [];
-      for (let i = 0; i < timestamps2.length; i++) {
-        const amount2 = amounts2[i];
-        t2.push({
-          x: moment(timestamps2[i]).format("DD-MM-YYYY HH:mm:ss"),
-          y: amount2,
-        });
-      }
-      // Sort data by timestamp
-      finalData = [
-        { label: poolDetails?.data?.labels[0], borderColor: "green", data: t1 },
-        {
-          label: poolDetails?.data?.labels[1],
-          borderColor: "red",
-          data: t2,
-        },
-      ];
-      timestamps = finalData[0].data
-        .map((item: { x: any }) => item.x)
-        .concat(finalData[1].data.map((item: { x: any }) => item.x))
-        .sort();
-
-      setLineChartData(finalData);
-      setTimeStampData(timestamps);
     }
-  }, [poolDetails?.data?.timestamps, poolDetails?.data?.amounts]);
+  }
 
   const navigate = useNavigate();
   const [amount, setAmount] = useState(0);
@@ -140,52 +114,7 @@ const PlaceBet = () => {
     <div className="flex min-h-screen ">
       <div className="w-1/2 h-auto p-2 m-6 flex flex-col overflow-y-auto">
         <div className="h-1/2 p-2 mx-6 shadow-xl ">
-          <Line
-            className="h-2/6"
-            options={{
-              responsive: true,
-              scales: {
-                // @ts-ignore
-                xAxis: {
-                  ticks: {
-                    // Include a dollar sign in the ticks
-                    callback: function (value, index, ticks) {
-                      // @ts-ignore
-                      let time = poolDetails?.data?.timestamps[0]
-                        .concat(poolDetails?.data?.timestamps[1])
-                        .sort()[index];
-                      return moment(time).format("HH:mm:ss");
-                    },
-                    color: "white",
-                  },
-                  labels: timeStampData,
-                },
-                y: {
-                  ticks: {
-                    color: "white",
-                  },
-                },
-              },
-              plugins: {
-                zoom: {
-                  zoom: {
-                    wheel: {
-                      enabled: true,
-                    },
-                    pinch: {
-                      enabled: true,
-                    },
-                    mode: "xy",
-                  },
-                  pan: {
-                    enabled: true,
-                    mode: "xy",
-                  },
-                },
-              },
-            }}
-            data={{ datasets: lineChartData }}
-          />
+          <LineChart amounts0={amounts_0} amounts1={amounts_1} poolDetails={poolDetails} timestamps={timeStamps} />
         </div>
         <div className="h-1/2 p-2 mx-6 my-1 shadow-xl">
           <Bar
