@@ -16,7 +16,7 @@
 /*Animation to Shimmer Component Cards */
 .stroke {
   height: 15px;
-  background: #777;
+  background: rgb(209 213 219);
 }
 .animate {
   animation: shimmer 3s;
