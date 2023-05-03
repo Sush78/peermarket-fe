@@ -13,12 +13,12 @@ const Chart: React.FC<{
   };
 }> = ({ amounts0, amounts1, poolDetails, timestamps }) => {
   const data = {
-    // labels: [...new Set([...timestamps0, ...timestamps1])],
     datasets: [
       {
         label: poolDetails?.data?.labels[0],
         data: amounts0,
         borderColor: "green",
+        backgroundColor: "green",
         lineTension: 0.1,
         spanGaps: true
       },
@@ -26,6 +26,7 @@ const Chart: React.FC<{
         label: poolDetails?.data?.labels[1],
         data: amounts1,
         borderColor: "red",
+        backgroundColor: "red",
         lineTension: 0.1,
         spanGaps: true
       },
