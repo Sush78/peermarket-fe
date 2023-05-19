@@ -23,11 +23,12 @@ import { io } from "socket.io-client";
 import { PoolContext } from "../context/PoolContext";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
-// import moment from "moment";
 import { socketEndPoint } from "../utils/constants/generic";
 import LineChart from "./LineChart";
 import PlaceBetShimmer from "./PlaceBetShimmer";
 import Timer from "./Timer";
+import * as api from '../api/index'
+import { Notification } from '../utils/constants/notification';
 
 ChartJS.register(
   CategoryScale,
@@ -111,6 +112,18 @@ const PlaceBet = () => {
 
   const handlePoolStatusChange = (value: boolean) => {
     setIsPoolExpired(value);
+    const addNotifcation = async () => {
+      const notification: Notification = 
+        {
+          pool_id: 1,
+          notification_text: 'You are Winner of this bet',
+          status: 'active',
+          player_address: 'test',
+          notification_title: 'Testing Notification 1'
+        }
+        await api.addNotification(notification);
+    };
+    addNotifcation();
     console.log("------", isPoolExpired);
   };
 

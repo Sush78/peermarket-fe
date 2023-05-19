@@ -1,5 +1,5 @@
 export interface Notification {
-    _id: any;
+    _id?: any;
     pool_id: number;
     notification_text: string;
     status: string;

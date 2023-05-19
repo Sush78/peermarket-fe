@@ -1,14 +1,5 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { NotificationContext } from '../context/NotificationContext';
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { AppDispatch } from "../redux/store";
-import {
-  getNotification,
-  addNotification,
-  updateNotification,
-} from "../redux/slices/notification";
-import useWindowSize from "react-use/lib/useWindowSize";
 import { PoolContext } from "../context/PoolContext";
 import * as api from '../api/index'
 import { Notification } from '../utils/constants/notification';
@@ -17,9 +8,7 @@ const Notifications = () => {
   const { currentAccount, placeBet } = useContext(PoolContext);
   debugger
   const { notifications, markNotificationAsRead } = useContext(NotificationContext);
-  //const notificationDetails = useSelector((store: any) => store.getNotification);
   const [expandedNotification, setExpandedNotification] = useState<any | null>(null);
-  const { width, height } = useWindowSize();
   const handleToggleDetails = (_id: any) => {
     if (expandedNotification == _id) {
       setExpandedNotification(null);
@@ -31,7 +20,7 @@ const Notifications = () => {
         if (notificationUpdated) {
           notificationUpdated.status = 'read';
           debugger
-          await api.updateNotifications(notificationUpdated);
+          await api.updateNotification(notificationUpdated);
         }
       };
       updateNotifcation();

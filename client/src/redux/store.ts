@@ -4,10 +4,6 @@ import user from './slices/user';
 import chart from './slices/chart';
 import topPools from './slices/topPools';
 import getPoolById from './slices/poolById';
-import {getNotificationReducer,
-  addNotificationReducer,
-  updateNotificationReducer,} from './slices/notification';
-
 
 export const store = configureStore({
   reducer: {
@@ -15,10 +11,7 @@ export const store = configureStore({
     user,
     chart,
     topPools,
-    getPoolById,
-    getNotification: getNotificationReducer,
-    addNotification: addNotificationReducer,
-    updateNotification: updateNotificationReducer,
+    getPoolById
   }
 })
 

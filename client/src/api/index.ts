@@ -9,7 +9,7 @@ export const fetchPoolById = (id: string) => fetch(`${bedEndPoint}pools/get-pool
 
 export const fetchNotifications = (playerAddress: string) => fetch(`${bedEndPoint}notification/getNotifications/${playerAddress}`)
 
-export const updateNotifications = (notification: Notification) => {
+export const updateNotification = (notification: Notification) => {
     return fetch(`${bedEndPoint}notification/updateNotification/${notification._id}`, {
       method: 'PUT',
       headers: {
@@ -19,7 +19,7 @@ export const updateNotifications = (notification: Notification) => {
     });
   };
 
-  export const addNotifications = (notification: Notification) => {
+  export const addNotification = (notification: Notification) => {
     return fetch(`${bedEndPoint}notification/addNotification/${notification._id}`, {
       method: 'POST',
       headers: {
