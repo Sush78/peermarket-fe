@@ -45,18 +45,6 @@ export const PoolProvider = ({ children }) => {
         }
     }
 
-    const connectWallet = async () => {
-        try{
-            if(!ethereum) return alert("Please install metamask")
-            const accounts = await ethereum.request({ method: "eth_requestAccounts"})
-            console.log("accountcontext: ", accounts)
-            setCurrentAccount(accounts[0])
-        } catch(error){
-            console.log(error)
-            alert("No ethereum object")
-        }
-    }
-
     const selectChoice = async (choice) => {
       if (choice){
         return ethers.utils.formatBytes32String('CSK')
@@ -85,6 +73,21 @@ export const PoolProvider = ({ children }) => {
         }
 
     }
+
+    const connectWallet = async (amount, choice) => {
+      try{
+          if(!ethereum) return alert("Please install metamask")
+          const accounts = await ethereum.request({ method: "eth_requestAccounts"})
+          console.log("accountcontext: ", accounts)
+          setCurrentAccount(accounts[0])
+          if(amount && choice) {
+            placeBet(amount, choice)
+          }
+      } catch(error){
+          console.log(error)
+          alert("No ethereum object")
+      }
+  }
 
     useEffect(() => {
         checkIfWalletIsConnected()

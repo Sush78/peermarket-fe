@@ -44,7 +44,7 @@ ChartJS.register(
 const socket = io(socketEndPoint);
 
 const PlaceBet = () => {
-  const { currentAccount, placeBet } = useContext(PoolContext);
+  const { connectWallet, currentAccount, placeBet } = useContext(PoolContext);
   const poolDetails = useSelector((store: any) => store.getPoolById);
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams] = useSearchParams();
@@ -96,6 +96,10 @@ const PlaceBet = () => {
 
   const onFormSubmit = (e: any) => {
     e.preventDefault();
+    if (!currentAccount.length) {
+      connectWallet(amount, choice);
+      return;
+    }
     if (amount > 0 && choice.length > 0) {
       console.log(amount, choice);
       socket.emit("newBet", { poolId, choice, amount, currentAccount });
