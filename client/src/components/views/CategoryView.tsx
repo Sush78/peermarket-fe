@@ -5,7 +5,7 @@ import { Category } from "../../models/CategoryView.model";
 import CategoryShimmer from "../CategoryShimmer";
 import { getCategories } from "../../redux/slices/categories";
 import { AppDispatch } from "../../redux/store";
-import Error from "../Error";
+import Error from "../ErrorPage";
 
 const CategoryView = () => {
   const allCategories = useSelector((state: any) => state.categories);
