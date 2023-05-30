@@ -4,6 +4,7 @@ import { AppDispatch } from "../redux/store";
 import BarChart from "./BarChart";
 import { getTopPools } from "../redux/slices/topPools";
 import CategoryShimmer from "./CategoryShimmer";
+import ErrorPage from "./ErrorPage";
 
 const LandingPage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -13,12 +14,13 @@ const LandingPage = () => {
     dispatch(getTopPools());
   }, []);
 
+  if (topPools.isError) {
+    return <ErrorPage />;
+  }
+
   if (topPools.isLoading) {
     return <CategoryShimmer />;
   }
-  /* if (topPools.isError) {
-    return <Error />;
-  } */
 
   return (
     <div className="flex flex-wrap justify-center min-h-screen ">
