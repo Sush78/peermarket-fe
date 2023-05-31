@@ -7,7 +7,6 @@ export const PoolContext = React.createContext()
 const { ethereum } = window
 
 export const PoolProvider = ({ children }) => {
-
     const [currentAccount, setCurrentAccount] = useState("")
 
     const createPoolContract = () => {
