@@ -1,12 +1,9 @@
 import { useState, useContext } from "react";
 import { NotificationContext } from '../context/NotificationContext';
-import { PoolContext } from "../context/PoolContext";
 import * as api from '../api/index'
 import { Notification } from '../utils/constants/notification';
 
 const Notifications = () => {
-  const { currentAccount, placeBet } = useContext(PoolContext);
-  debugger
   const { notifications, markNotificationAsRead } = useContext(NotificationContext);
   const [expandedNotification, setExpandedNotification] = useState<any | null>(null);
   const handleToggleDetails = (_id: any) => {
@@ -15,7 +12,7 @@ const Notifications = () => {
     } else {
       setExpandedNotification(_id);
       markNotificationAsRead(_id);
-      const updateNotifcation = async () => {
+      const updateNotification = async () => {
         const notificationUpdated = notifications.find((x) => x._id === _id && x.status === 'active') as Notification;
         if (notificationUpdated) {
           notificationUpdated.status = 'read';
@@ -23,7 +20,7 @@ const Notifications = () => {
           await api.updateNotification(notificationUpdated);
         }
       };
-      updateNotifcation();
+      updateNotification();
     }
   };
  

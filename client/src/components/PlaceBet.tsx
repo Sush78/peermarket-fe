@@ -119,11 +119,11 @@ const PlaceBet = () => {
     setIsPoolExpired(value);
     const addNotifcation = async () => {
       const notification: Notification = {
-        pool_id: 1,
+        pool_id: poolId,
         notification_text: "You are Winner of this bet",
         status: "active",
-        player_address: "test",
-        notification_title: "Testing Notification 1",
+        player_address: currentAccount,
+        notification_title: "Winner of Pool",
       };
       await api.addNotification(notification);
     };

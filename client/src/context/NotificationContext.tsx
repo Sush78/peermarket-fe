@@ -1,24 +1,28 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useContext } from 'react';
 import * as api from '../api/index'
 import { Notification } from '../utils/constants/notification';
-
+import { PoolContext } from "../context/PoolContext";
 interface NotificationContextProps {
   notifications: Notification[];
   markNotificationAsRead: (poolId: number) => void;
   activeNotifications: number;
+  currentAccount: string;
 }
 
 export const NotificationContext = createContext<NotificationContextProps>({
   notifications: [],
   markNotificationAsRead: () => {},
   activeNotifications: 0,
+  currentAccount: ''
 });
 
 export const NotificationProvider: React.FC<{ children: React.ReactNode, notificationDetails: Notification[]  }> = ({ children, notificationDetails }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const { connectWallet, currentAccount, placeBet } = useContext(PoolContext);
   useEffect(() => {
+    debugger;
     const fetchData = async () => {
-      const playerAddress = 'test';
+      const playerAddress = currentAccount;
       const data = await api.fetchNotifications(playerAddress);
       const json = await data.json();
       const notificationData = json as Notification[];
@@ -26,7 +30,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode, notific
     };
   
     fetchData();
-  }, []);
+  }, [currentAccount]);
   
   const markNotificationAsRead = (_id: any) => {
     setNotifications((prevNotifications) =>
@@ -43,7 +47,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode, notific
   ).length;
 
   return (
-    <NotificationContext.Provider value={{ notifications, markNotificationAsRead, activeNotifications }}>
+    <NotificationContext.Provider value={{ notifications, markNotificationAsRead, activeNotifications, currentAccount }}>
       {children}
     </NotificationContext.Provider>
   );

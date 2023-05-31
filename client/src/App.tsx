@@ -7,18 +7,14 @@ import MyBets from "./components/MyBets";
 import CreatePool from "./components/CreatePool";
 import Notification from "./components/Notification";
 import { NotificationProvider } from "./context/NotificationContext";
-import { useSelector } from "react-redux";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import ErrorPage from "./components/ErrorPage";
 
 function App() {
-  const notificationDetails = useSelector(
-    (store: any) => store.getNotification
-  );
   return (
     <div className="flex flex-col min-h-screen font-sans bg-gradient-to-b from-gray-700 via-gray-900 to-slate-900">
       <Router>
-        <NotificationProvider notificationDetails={notificationDetails}>
+        <NotificationProvider notificationDetails={[]}>
           <Header />
           <Routes>
             <Route element={<PrivateRoutes />}>
@@ -27,6 +23,7 @@ function App() {
             </Route>
             <Route path="/" element={<LandingPage />} />
             <Route path="/placeBet" element={<PlaceBet />} />
+            <Route path="/notifications" element={<Notification />} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
         </NotificationProvider>
